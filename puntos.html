@@ -25,7 +25,7 @@
             "Óscar": 20,
             "Hugo": 15,
             "Irene": 20,
-            "José": 20,
+            "Jose": 20,
             "Zuri": 15,
             "Viti": 20,
             "Cande": 20,
@@ -62,8 +62,22 @@
         }
 
         // Llamar a las funciones al cargar la página
-        mostrarPuntosUsuario();
-        mostrarGanadorAbsoluto();
+        let nombreUsuario = obtenerNombreUsuario();
+        if (nombreUsuario && nombreUsuario in puntos) {
+            mostrarPuntosUsuario();
+            mostrarGanadorAbsoluto();
+        } else {
+            mostrarError();
+        }
+
+        // Función para mostrar un mensaje de error si el nombre es incorrecto
+        function mostrarError() {
+            let container = document.querySelector('.container');
+            let errorDiv = document.createElement('div');
+            errorDiv.classList.add('error');
+            errorDiv.textContent = 'Nombre incorrecto';
+            container.appendChild(errorDiv);
+        }
     </script>
 </body>
 </html>
