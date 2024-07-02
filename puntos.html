@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puntos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Puntos</h1>
+        <div id="puntosUsuarioContainer"></div>
+        <div id="ganadorContainer" class="ganador"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Datos de puntos
+        const puntos = {
+            "Ludy": 15,
+            "Abel": 20,
+            "Rubén": 15,
+            "Jorge": 20,
+            "Olga": 15,
+            "Óscar": 20,
+            "Hugo": 15,
+            "Irene": 20,
+            "José": 20,
+            "Zuri": 15,
+            "Viti": 20,
+            "Cande": 20,
+            "Macu": 20
+        };
+
+        // Función para obtener el nombre almacenado en localStorage
+        function obtenerNombreUsuario() {
+            return localStorage.getItem('nombre');
+        }
+
+        // Función para mostrar los puntos del usuario registrado
+        function mostrarPuntosUsuario() {
+            let nombreUsuario = obtenerNombreUsuario();
+            let puntosUsuario = puntos[nombreUsuario];
+
+            let puntosUsuarioContainer = document.getElementById('puntosUsuarioContainer');
+            puntosUsuarioContainer.innerHTML = `<p class="nombre">${nombreUsuario} tienes:</p><p class="puntos">${puntosUsuario} <span>PUNTOS</span></p>`;
+        }
+
+        // Función para encontrar y mostrar al ganador absoluto
+        function mostrarGanadorAbsoluto() {
+            let puntosOrdenados = Object.entries(puntos).sort((a, b) => b[1] - a[1]); // Ordenar por puntos de mayor a menor
+
+            let maxPuntos = puntosOrdenados[0][1]; // Puntos del ganador absoluto
+            let ganadores = puntosOrdenados.filter(item => item[1] === maxPuntos).map(item => item[0]); // Nombres de los ganadores
+
+            let ganadorContainer = document.getElementById('ganadorContainer');
+            if (ganadores.length === 1) {
+                ganadorContainer.innerHTML = `<p class="ganador">GANADOR: ${ganadores[0]} - ${maxPuntos} PUNTOS</p>`;
+            } else {
+                ganadorContainer.innerHTML = `<p class="ganador">EMPATE: ${ganadores.join(', ')} - ${maxPuntos} PUNTOS</p>`;
+            }
+        }
+
+        // Llamar a las funciones al cargar la página
+        mostrarPuntosUsuario();
+        mostrarGanadorAbsoluto();
+    </script>
+</body>
+</html>
