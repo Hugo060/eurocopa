@@ -47,6 +47,13 @@ button:hover {
 }
 
 .puntos {
-    font-size: 20px;
+    font-size: 24px;
     margin-bottom: 20px;
 }
+
+.error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
