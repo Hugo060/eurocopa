@@ -10,12 +10,12 @@
     <div class="container">
         <h1>Puntos</h1>
         <div id="puntosUsuarioContainer"></div>
-        <div id="ganadorContainer" class="ganador"></div>
+        <div id="podioContainer" class="podio"></div>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // Datos de puntos
+        // Datos de puntos con Hugo actualizado a 17 puntos
         const puntos = {
             "Ludy": 15,
             "Abel": 20,
@@ -23,7 +23,7 @@
             "Jorge": 20,
             "Olga": 15,
             "Óscar": 20,
-            "Hugo": 15,
+            "Hugo": 15, 
             "Irene": 20,
             "Jose": 20,
             "Zuri": 15,
@@ -46,26 +46,73 @@
             puntosUsuarioContainer.innerHTML = `<p class="nombre">${nombreUsuario} tienes:</p><p class="puntos">${puntosUsuario} <span>PUNTOS</span></p>`;
         }
 
-        // Función para encontrar y mostrar al ganador absoluto
-        function mostrarGanadorAbsoluto() {
+        // Función para mostrar el podio de los tres primeros lugares
+        function mostrarPodio() {
             let puntosOrdenados = Object.entries(puntos).sort((a, b) => b[1] - a[1]); // Ordenar por puntos de mayor a menor
+            
+            let podioContainer = document.getElementById('podioContainer');
+            let primerPuesto = puntosOrdenados[0][1];
+            let segundoPuesto = null;
+            let tercerPuesto = null;
 
-            let maxPuntos = puntosOrdenados[0][1]; // Puntos del ganador absoluto
-            let ganadores = puntosOrdenados.filter(item => item[1] === maxPuntos).map(item => item[0]); // Nombres de los ganadores
-
-            let ganadorContainer = document.getElementById('ganadorContainer');
-            if (ganadores.length === 1) {
-                ganadorContainer.innerHTML = `<p class="ganador">GANADOR: ${ganadores[0]} - ${maxPuntos} PUNTOS</p>`;
-            } else {
-                ganadorContainer.innerHTML = `<p class="ganador">EMPATE: ${ganadores.join(', ')} - ${maxPuntos} PUNTOS</p>`;
+            // Encontrar el segundo puesto
+            for (let i = 1; i < puntosOrdenados.length; i++) {
+                if (puntosOrdenados[i][1] < primerPuesto) {
+                    segundoPuesto = puntosOrdenados[i][1];
+                    break;
+                }
             }
+
+            // Encontrar el tercer puesto
+            for (let i = 1; i < puntosOrdenados.length; i++) {
+                if (puntosOrdenados[i][1] < segundoPuesto && puntosOrdenados[i][1] !== primerPuesto) {
+                    tercerPuesto = puntosOrdenados[i][1];
+                    break;
+                }
+            }
+
+            // Mostrar 1er Lugar
+            podioContainer.innerHTML += `<h2>1er Lugar</h2>`;
+            puntosOrdenados.forEach((item) => {
+                if (item[1] === primerPuesto) {
+                    podioContainer.innerHTML += `<div class="podio-item">${item[0]} - ${item[1]} PUNTOS</div>`;
+                }
+            });
+
+            // Mostrar 2nd Lugar si existe
+            if (segundoPuesto !== null) {
+                podioContainer.innerHTML += `<h2>2nd Lugar</h2>`;
+                puntosOrdenados.forEach((item) => {
+                    if (item[1] === segundoPuesto) {
+                        podioContainer.innerHTML += `<div class="podio-item">${item[0]} - ${item[1]} PUNTOS</div>`;
+                    }
+                });
+            }
+
+            // Mostrar 3er Lugar si existe
+            if (tercerPuesto !== null) {
+                podioContainer.innerHTML += `<h2>3er Lugar</h2>`;
+                puntosOrdenados.forEach((item) => {
+                    if (item[1] === tercerPuesto) {
+                        podioContainer.innerHTML += `<div class="podio-item">${item[0]} - ${item[1]} PUNTOS</div>`;
+                    }
+                });
+            }
+
+            // Mostrar Último Lugar para participantes con menos puntos
+            podioContainer.innerHTML += `<h2>Último Lugar</h2>`;
+            puntosOrdenados.forEach((item) => {
+                if (item[1] !== primerPuesto && item[1] !== segundoPuesto && item[1] !== tercerPuesto) {
+                    podioContainer.innerHTML += `<div class="podio-item">${item[0]} - ${item[1]} PUNTOS</div>`;
+                }
+            });
         }
 
         // Llamar a las funciones al cargar la página
         let nombreUsuario = obtenerNombreUsuario();
         if (nombreUsuario && nombreUsuario in puntos) {
             mostrarPuntosUsuario();
-            mostrarGanadorAbsoluto();
+            mostrarPodio();
         } else {
             mostrarError();
         }
